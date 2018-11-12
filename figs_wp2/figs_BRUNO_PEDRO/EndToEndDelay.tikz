@@ -1,0 +1,74 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 0,
+ xmax = 210,
+ ymin = 0,
+ ymax = 0.02,
+ xtick={0,50,100,150,210},
+ ytick={0,0.002,0.004,0.006,0.008,0.01,0.012,0.014,0.016,0.018,0.02},
+ xlabel = {End-To-End delay(ms)},
+% ylabel = {naosei},
+ legend style = {%
+  %%  text width=2em,
+  text height=1ex,
+  %  text depth=.5ex,
+  legend pos=south west,
+  font=\footnotesize,
+ },
+ ticklabel style = {font=\Large},
+ label style = {font=\Large},
+ ]
+
+ \definecolor{colorQHMLWDF}{RGB}{255,0,0}
+ \definecolor{colorJSM}{RGB}{0,0,0}
+ \definecolor{colorEXPPF}{RGB}{0,255,0}
+ \definecolor{colorMDU}{RGB}{0,0,255}
+ \definecolor{colorLEI}{RGB}{153,63,0}
+
+ \tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}}
+ \tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+ \tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+ \tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+ \tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+ \tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+
+
+ \def\tablename{CoreDelayPdf.dat}
+
+ \addplot[JSM style]
+ table[x=x1,y=y1] {\tablename};
+% \addlegendentry{Error0};
+  \node[anchor=west] (source) at (axis cs:-0.07, 0.05){};
+  \node (destination) at (axis cs:1.03, 0.05){};
+  \draw[<->, black, line width=0.5pt](source)--(destination)node[above, pos=0.5, font=\tiny] {RT weight};
+%
+%  \node[anchor=west] (source) at (axis cs:0.935, 0.05){};
+%  \node (destination) at (axis cs:5.03, 0.1){};
+%  \draw[<->, black, line width=0.5pt](source)--(destination)node[above, pos=0.5, font=\tiny] {NRT weight};
+\draw[thick,->] (1,0) -- (1,180) node[anchor=south west] {$3\sigma$};
+
+\draw[thick,->] (35,0) -- (35,150) node[anchor=south west] {$2\sigma$};
+
+\draw[thick,->] (70,0) -- (70,130) node[anchor=south west] {$1\sigma$};
+
+\draw[thick,->] (210,0) -- (210,180) node[anchor=south west] {$3\sigma$};
+
+\draw[thick,->] (170,0) -- (170,150) node[anchor=south west] {$2\sigma$};
+
+\draw[thick,->] (140,0) -- (140,130) node[anchor=south west] {$1\sigma$};
+
+\draw[thick,<->] (3,180) -- (208,180) node[above, pos = 0.4,  anchor=south west] {$99.7\%$ of probability};
+
+\draw[thick,<->] (37,150) -- (168,150) node[above, pos = 0.36,  anchor=south west] {$95\%$ of probability};
+
+\draw[thick,<->] (72,130) -- (138,130) node[above, pos = 0.2,  anchor=south west] {$68\%$ of probability};
+ \end{axis}
+
+
+\end{tikzpicture}

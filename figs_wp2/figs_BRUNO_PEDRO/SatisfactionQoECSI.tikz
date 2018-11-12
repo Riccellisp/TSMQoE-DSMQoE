@@ -1,0 +1,124 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 200,
+ xmax = 600,
+ ymin = 0.5,
+ ymax = 1.0,
+ xtick={200,300,400,500,600},
+ ytick={0,0.1,0.2,...,0.5,0.6,0.7,0.8,0.9,1.0},
+ xlabel = {Number of VoIP users per cell},
+ ylabel = {QoE-based Satisfaction Index},
+ legend style = {
+%  legend pos=south west,
+at={(0.282,0.404)},
+  font=\small,
+ },
+ ticklabel style = {font=\Large},
+ label style = {font=\Large},
+ ]
+
+ \definecolor{colorDSMQoE}{RGB}{0,0,255}
+ \definecolor{colorQoEScheme}{RGB}{0,0,0}
+ \definecolor{colorDSMQoS}{RGB}{255,0,0}
+ \definecolor{colorPF}{RGB}{255,140,0}
+
+% \definecolor{name}{model}{color-spec}
+% perfeitos
+ \tikzset{plot common style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+
+ \tikzset{DSMQoETime0 style/.append style={plot common style, solid, mark=square*, color=colorDSMQoE}}
+
+ \tikzset{QoESchemeTime0 style/.append style={plot common style, solid, mark=triangle*, color=colorDSMQoE}}
+
+
+ \tikzset{DSMQoSTime0 style/.append style={plot common style, solid, mark=*, color=colorDSMQoE}}
+
+% time10
+  \tikzset{plot common2 style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+
+  \tikzset{DSMQoETime10 style/.append style={plot common2 style, solid, mark=square*, color=colorDSMQoS}}
+
+  \tikzset{QoESchemeTime10 style/.append style={plot common2 style, solid, mark=triangle*, color=colorDSMQoS}}
+
+  \tikzset{DSMQoSTime10 style/.append style={plot common2 style, solid, mark=*, color=colorDSMQoS}}
+
+%  Time 20
+  \tikzset{plot common3 style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+
+  \tikzset{DSMQoETime20 style/.append style={plot common3 style, solid, mark=square*, color=colorPF}}
+
+  \tikzset{QoESchemeTime20 style/.append style={plot common3 style, solid, mark=triangle*, color=colorPF}}
+
+  \tikzset{DSMQoSTime20 style/.append style={plot common3 style, solid, mark=*, color=colorPF}}
+
+ %  Time 40
+   \tikzset{plot common4 style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+
+   \tikzset{DSMQoETime40 style/.append style={plot common4 style, solid, mark=square*, color=colorQoEScheme}}
+
+   \tikzset{QoESchemeTime40 style/.append style={plot common4 style, solid, mark=triangle*, color=colorQoEScheme}}
+
+   \tikzset{DSMQoSTime40 style/.append style={plot common4 style, solid, mark=*, color=colorQoEScheme}}
+
+ \def\tablename{satisfactionQoECSI.dat}
+
+ \addplot[DSMQoETime0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoETime0 , y error minus = DSMQoEDOWNTime0, y error plus = DSMQoEUPTime0] {\tablename};
+ \addlegendentry{DSMQoE $\Delta t$ = 0 TTIs;}
+
+ \addplot[DSMQoETime10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoETime10 , y error minus = DSMQoEDOWNTime10, y error plus = DSMQoEUPTime10] {\tablename};
+ \addlegendentry{DSMQoE $\Delta t$ = 10 TTIs;}
+
+ \addplot[DSMQoETime20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoETime20 , y error minus = DSMQoEDOWNTime20, y error plus = DSMQoEUPTime20] {\tablename};
+ \addlegendentry{DSMQoE $\Delta t$ = 20 TTIs;}
+
+ \addplot[DSMQoETime40 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoETime40 , y error minus = DSMQoEDOWNTime40, y error plus = DSMQoEUPTime40] {\tablename};
+ \addlegendentry{DSMQoE $\Delta t$ = 40 TTIs;}
+
+ \addplot[DSMQoSTime0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSTime0 , y error minus = DSMQoSDOWNTime0, y error plus = DSMQoSUPTime0] {\tablename};
+ \addlegendentry{DSM $\Delta t$ = 0 TTIs};
+
+ \addplot[DSMQoSTime10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSTime10 , y error minus = DSMQoSDOWNTime10, y error plus = DSMQoSUPTime10] {\tablename};
+ \addlegendentry{DSM $\Delta t$ = 10 TTIs};
+
+ \addplot[DSMQoSTime20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSTime20 , y error minus = DSMQoSDOWNTime20, y error plus = DSMQoSUPTime20] {\tablename};
+ \addlegendentry{DSM $\Delta t$ = 20 TTIs};
+
+ \addplot[DSMQoSTime40 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSTime40 , y error minus = DSMQoSDOWNTime40, y error plus = DSMQoSUPTime40] {\tablename};
+ \addlegendentry{DSM $\Delta t$ = 40 TTIs};
+
+ \addplot[QoESchemeTime0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeTime0, y error minus = QoESchemeDOWNTime0, y error plus = QoESchemeUPTime0] {\tablename};
+ \addlegendentry{QoE Scheme $\Delta t$ = 0 TTIs};
+
+ \addplot[QoESchemeTime10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeTime10, y error minus = QoESchemeDOWNTime10, y error plus = QoESchemeUPTime10] {\tablename};
+ \addlegendentry{QoE Scheme $\Delta t$ = 10 TTIs};
+
+ \addplot[QoESchemeTime20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeTime20, y error minus = QoESchemeDOWNTime20, y error plus = QoESchemeUPTime20] {\tablename};
+ \addlegendentry{QoE Scheme $\Delta t$ = 20 TTIs};
+
+ \addplot[QoESchemeTime40 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeTime40, y error minus = QoESchemeDOWNTime40, y error plus = QoESchemeUPTime40] {\tablename};
+ \addlegendentry{QoE Scheme $\Delta t$ = 40 TTIs};
+
+ \node[anchor=west] (source) at (axis cs:200, 0.899){};
+ \node (destination) at (axis cs:206, 0.899){};
+ \draw[black, line width=1pt](source)--(destination);
+
+ \end{axis}
+ \end{tikzpicture}

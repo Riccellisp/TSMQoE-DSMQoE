@@ -1,0 +1,63 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 10,
+ xmax = 50,
+ ymin = 0,
+ ymax = 16.0,
+ xtick={10,20,30,40,50},
+ ytick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
+ xlabel = {Number of CBR users per cell},
+ ylabel = {Mean Troughput per cell},
+ legend style = {%
+  %%  text width=2em,
+  text height=1ex,
+  %  text depth=.5ex,
+  legend pos=south west,
+  font=\footnotesize,
+ },
+ ticklabel style = {font=\footnotesize},
+ label style = {font=\footnotesize},
+ ]
+
+ \definecolor{colorQHMLWDF}{RGB}{255,0,0}
+ \definecolor{colorJSM}{RGB}{0,0,0}
+ \definecolor{colorEXPPF}{RGB}{0,255,0}
+ \definecolor{colorMDU}{RGB}{0,0,255}
+ \definecolor{colorLEI}{RGB}{153,63,0}
+
+ \tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}}
+ \tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+ \tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+ \tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+ \tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+ \tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+
+
+ \def\tablename{capacity.dat}
+
+ \addplot[JSM style]
+ table[x=x,y=TSMQoE] {\tablename};
+ \addlegendentry{TSMQoE};
+
+ \addplot[QHMLWDF style]
+ table[x=x,y=ProportionalFair] {\tablename};
+ \addlegendentry{ProportionalFair};
+ fairness
+ \addplot[EXPPF style]
+ table[x=x,y=ProportionalFairQoE] {\tablename};
+ \addlegendentry{ProportionalFairQoE};
+
+ \addplot[MDU style]
+ table[x=x,y=TSMQoS] {\tablename};
+ \addlegendentry{TSMQoS};
+
+
+
+ \end{axis}
+ \end{tikzpicture}

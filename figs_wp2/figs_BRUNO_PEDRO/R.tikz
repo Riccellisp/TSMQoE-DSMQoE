@@ -1,0 +1,59 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 0,
+ xmax = 700,
+ ymin = 0,
+ ymax = 100,
+ xtick={0,100,200,300,400,500,600,700},
+ ytick={0,10,20,30,40,50,60,70,80,90,100},
+ xlabel = {End-To-End delay(ms)},
+ ylabel = {R factor},
+ legend style = {%
+    text width=14em,
+  text height=3.5ex,
+%    text depth=0ex,
+%  legend pos=south west,
+at={(0.356,0.19)},
+  font=\Large,
+ },
+ ticklabel style = {font=\Large},
+ label style = {font=\Large},
+ ]
+
+ \definecolor{colorQHMLWDF}{RGB}{255,0,0}
+ \definecolor{colorJSM}{RGB}{0,0,0}
+ \definecolor{colorEXPPF}{RGB}{255,140,0}
+ \definecolor{colorMDU}{RGB}{0,0,255}
+ \definecolor{colorLEI}{RGB}{153,63,0}
+
+ \tikzset{plot common style/.append style={line width=0pt, mark options={scale=1pt, solid}}}
+ \tikzset{QHMLWDF style/.append style={plot common style, solid, mark=*, color=colorQHMLWDF}}
+ \tikzset{JSM style/.append style={plot common style,solid,mark=square*, color=colorJSM}}
+ \tikzset{MDU style/.append style={plot common style,solid, mark=*, color=colorMDU}}
+ \tikzset{EXPPF style/.append style={plot common style,solid,mark=triangle*, color=colorEXPPF}}
+ \tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+
+
+ \def\tablename{R.dat}
+
+ \addplot[JSM style]
+%\addplot [dashed, mark=o]
+ table[x=x,y=Error0] {\tablename};
+ \addlegendentry{Core Network Error 0\%};
+
+ \addplot[QHMLWDF style]
+ table[x=x,y=Error2] {\tablename};
+ \addlegendentry{Core Network Error 2\%};
+
+ \addplot[EXPPF style]
+ table[x=x,y=Error4] {\tablename};
+ \addlegendentry{Core Network Error 4\%};
+ \end{axis}
+
+\end{tikzpicture}

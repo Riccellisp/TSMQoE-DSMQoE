@@ -1,0 +1,100 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 10,
+ xmax = 70,
+ ymin = 0,
+ ymax = 1,
+ xtick={0,10,20,30,40,50,60,70},
+ ytick={0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1},
+ xlabel = {Number of users per cell},
+ ylabel = {Satisfaction Index},
+ legend style = {
+  legend pos=south west,
+  font=\Large,
+ },
+ ticklabel style = {font=\Large},
+ label style = {font=\Large},
+ ]
+
+ \definecolor{colorTSMQoE}{RGB}{0,0,255}
+ \definecolor{colorProportionalFairQoE}{RGB}{0,0,0}
+ \definecolor{colorTSMQoS}{RGB}{255,0,0}
+ \definecolor{colorPF}{RGB}{0,255,0}
+ % perfeitos
+ \tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1.5pt, solid}}}
+
+ \tikzset{TSMQoE0 style/.append style={plot common style, solid, mark=square, color=colorTSMQoE}}
+
+ \tikzset{TSMQoS0 style/.append style={plot common style, solid, mark=square, color=colorTSMQoS}}
+
+
+ \tikzset{ProportionalFairQoE0 style/.append style={plot common style, solid, mark=square, color=colorProportionalFairQoE}}
+
+ % time10
+ \tikzset{plot common2 style/.append style={line width=0.8pt, mark options={scale=1.5pt,  densely dashed}}}
+
+ \tikzset{TSMQoE10 style/.append style={plot common2 style, densely dashed, mark=triangle, color=colorTSMQoE}}
+
+ \tikzset{TSMQoS10 style/.append style={plot common2 style,densely dashed, mark=triangle, color=colorTSMQoS}}
+
+ \tikzset{ProportionalFairQoE10 style/.append style={plot common2 style,densely dashed, mark=triangle, color=colorProportionalFairQoE}}
+
+ %  Time 20
+ \tikzset{plot common3 style/.append style={line width=0.8pt, mark options={scale=1.5pt, densely dotted}}}
+
+ \tikzset{TSMQoE20 style/.append style={plot common3 style,densely dotted, mark=o, color=colorTSMQoE}}
+
+ \tikzset{TSMQoS20 style/.append style={plot common3 style,densely dotted, mark=o, color=colorTSMQoS}}
+
+ \tikzset{ProportionalFairQoE20 style/.append style={plot common3 style,densely  dotted, mark=o, color=colorProportionalFairQoE}}
+
+ \def\tablename{SatisfactionTODOS.dat}
+
+ \addplot[TSMQoE0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoE0 , y error minus = TSMQoEDOWN0, y error plus = TSMQoEUP0] {\tablename};
+ \addlegendentry{TSMQoE $\Delta t$ = 0 TTIs};
+
+ \addplot[TSMQoE10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoE10 , y error minus = TSMQoEDOWN10, y error plus = TSMQoEUP10] {\tablename};
+ \addlegendentry{TSMQoE $\Delta t$ = 10 TTIs};
+
+ \addplot[TSMQoE20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoE20 , y error minus = TSMQoEDOWN20, y error plus = TSMQoEUP20] {\tablename};
+ \addlegendentry{TSMQoE $\Delta t$ = 20 TTIs};
+
+ \addplot[TSMQoS0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoS0 , y error minus = TSMQoSDOWN0, y error plus = TSMQoSUP0] {\tablename};
+ \addlegendentry{TSMQoS $\Delta t$ = 0 TTIs};
+
+ \addplot[TSMQoS10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoS10 , y error minus =TSMQoSDOWN10, y error plus = TSMQoSUP10] {\tablename};
+ \addlegendentry{TSMQoS $\Delta t$ = 10 TTIs};
+
+ \addplot[TSMQoS20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=TSMQoS20 , y error minus = TSMQoSDOWN20, y error plus = TSMQoSUP20] {\tablename};
+ \addlegendentry{TSMQoS $\Delta t$ = 20 TTIs};
+
+ \addplot[ProportionalFairQoE0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=ProportionalFairQoE0, y error minus = ProportionalFairQoEDOWN0, y error plus =ProportionalFairQoEUP0] {\tablename};
+ \addlegendentry{ProportionalFairQoE $\Delta t$ = 0 TTIs};
+
+ \addplot[ProportionalFairQoE10 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=ProportionalFairQoE10, y error minus = ProportionalFairQoEDOWN10, y error plus = ProportionalFairQoEUP10] {\tablename};
+ \addlegendentry{ProportionalFairQoE $\Delta t$ = 10 TTIs};
+
+ \addplot[ProportionalFairQoE20 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=ProportionalFairQoE20, y error minus = ProportionalFairQoEDOWN20, y error plus = ProportionalFairQoEUP20] {\tablename};
+ \addlegendentry{ProportionalFairQoE $\Delta t$ = 20 TTIs};
+
+ \node[anchor=west] (source) at (axis cs:200, 0.899){};
+ \node (destination) at (axis cs:206, 0.899){};
+ \draw[black, line width=1pt](source)--(destination);
+
+ \end{axis}
+ \end{tikzpicture}

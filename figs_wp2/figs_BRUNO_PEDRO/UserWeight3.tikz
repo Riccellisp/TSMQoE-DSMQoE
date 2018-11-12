@@ -1,0 +1,40 @@
+ \begin{tikzpicture}
+ \begin{axis}[%
+ enlargelimits=false,
+ cycle list shift=0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 0,
+ xmax = 2,
+ ymin = 0,
+ ymax = 2.5,
+ xtick={0,0.5,...,2},
+ ytick={0,0.5,1,...,2.5},
+ xlabel = {Normalized user QoS metric},
+ ylabel = {User weight},
+ legend style = {%
+  %%  text width=2em,
+  text height=0.5ex,
+  %  text depth=.5ex,
+  %legend pos=north east,
+  at={(0.86,0.94)},
+  anchor=south,
+  font=\tiny,
+ },
+ ticklabel style = {font=\tiny},
+ label style = {font=\tiny},
+ ]
+
+ \definecolor{colorCurve}{RGB}{255,0,0}
+
+ \tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}}
+ \tikzset{Curve style/.append style={plot common style, solid, color=colorCurve}}
+
+ \def\tablename{UserWeight.dat}
+
+ \addplot[Curve style]
+ table[x=x1,y=y1] {\tablename};
+ \addlegendentry{TSM or DSM};
+
+ \end{axis}
+ \end{tikzpicture}

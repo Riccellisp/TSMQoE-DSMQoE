@@ -1,0 +1,91 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+ width = 1.0\textwidth,
+ height = 0.6\textheight,
+ cycle list shift = 0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 200,
+ xmax = 600,
+ ymin = 0.7,
+ ymax = 1.0,
+ xtick={200,300,400,500,600},
+ ytick={0,0.1,0.2,...,0.5,0.6,0.7,0.8,0.9,1.0},
+ xlabel = {Number of VoIP users per cell},
+ ylabel = {Fairness Index},
+ legend style = {
+%  legend pos=south west,
+at={(0.302,0.354)},
+  font=\large,
+ },
+ ticklabel style = {font=\Large},
+ label style = {font=\Large},
+ ]
+
+
+ \definecolor{colorERROR0}{RGB}{0,0,0}
+ \definecolor{colorERROR2}{RGB}{255,0,0}
+ \definecolor{colorERROR4}{RGB}{255,140,0}
+  \definecolor{colorPF}{RGB}{255,140,0}
+% perfeitos
+ \tikzset{plot common style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+
+ \tikzset{DSMQoEERROR0 style/.append style={plot common style, solid, mark=square*, color=colorERROR0}}
+ \tikzset{DSMQoEERROR2 style/.append style={plot common style, solid, mark=square*, color=colorERROR2}}
+ \tikzset{DSMQoEERROR4 style/.append style={plot common style, solid, mark=square*, color=colorERROR4}}
+
+ \tikzset{plot common2 style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+ \tikzset{DSMQoSERROR0 style/.append style={plot common2 style, solid, mark=*, color=colorERROR0}}
+ \tikzset{DSMQoSERROR2 style/.append style={plot common2 style, solid, mark=*, color=colorERROR2}}
+ \tikzset{DSMQoSERROR4 style/.append style={plot common2 style, solid, mark=*, color=colorERROR4}}
+
+ \tikzset{plot common3 style/.append style={line width=1pt, mark options={scale=2pt, solid}}}
+ \tikzset{QoESchemeERROR0 style/.append style={plot common3 style, solid, mark=triangle*, color=colorERROR0}}
+ \tikzset{QoESchemeERROR2 style/.append style={plot common3 style, solid, mark=triangle*, color=colorERROR2}}
+ \tikzset{QoESchemeERROR4 style/.append style={plot common3 style, solid, mark=triangle*, color=colorERROR4}}
+
+ \def\tablename{fairnessxerror.dat}
+
+ \addplot[DSMQoEERROR0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoEERROR0 , y error minus = DSMQoEDOWNERROR0, y error plus = DSMQoEUPERROR0] {\tablename};
+ \addlegendentry{DSMQoE Error 0\%;}
+
+ \addplot[DSMQoEERROR2 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoEERROR2 , y error minus = DSMQoEDOWNERROR2, y error plus = DSMQoEUPERROR2] {\tablename};
+ \addlegendentry{DSMQoE Error 2\%;}
+
+ \addplot[DSMQoEERROR4 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoEERROR4 , y error minus = DSMQoEDOWNERROR4, y error plus = DSMQoEUPERROR4] {\tablename};
+ \addlegendentry{DSMQoE Error 4\%;}
+
+ \addplot[DSMQoSERROR0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSERROR0 , y error minus = DSMQoSDOWNERROR0, y error plus = DSMQoSUPERROR0] {\tablename};
+ \addlegendentry{DSM Error 0\%};
+
+ \addplot[DSMQoSERROR2 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSERROR2 , y error minus = DSMQoSDOWNERROR2, y error plus = DSMQoSUPERROR2] {\tablename};
+ \addlegendentry{DSM Error 2\%};
+
+ \addplot[DSMQoSERROR4 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=DSMQoSERROR4 , y error minus = DSMQoSDOWNERROR4, y error plus = DSMQoSUPERROR4] {\tablename};
+ \addlegendentry{DSM Error 4\%};
+
+ \addplot[QoESchemeERROR0 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeERROR0, y error minus = QoESchemeDOWNERROR0, y error plus = QoESchemeUPERROR0] {\tablename};
+ \addlegendentry{QoE Scheme Error 0\%};
+
+ \addplot[QoESchemeERROR2 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeERROR2, y error minus = QoESchemeDOWNERROR2, y error plus = QoESchemeUPERROR2] {\tablename};
+ \addlegendentry{QoE Scheme Error 2\%};
+
+ \addplot[QoESchemeERROR4 style ,error bars/.cd, y dir=both,y explicit]
+ table[x=x,y=QoESchemeERROR4, y error minus = QoESchemeDOWNERROR4, y error plus = QoESchemeUPERROR4] {\tablename};
+ \addlegendentry{QoE Scheme Error 4\%};
+
+ \node[anchor=west] (source) at (axis cs:200, 0.899){};
+ \node (destination) at (axis cs:206, 0.899){};
+ \draw[black, line width=1pt](source)--(destination);
+
+ \end{axis}
+ \end{tikzpicture}

@@ -1,0 +1,69 @@
+ \begin{tikzpicture}
+ \begin{axis}[%
+ enlargelimits=false,
+ cycle list shift=0,
+ grid = major,
+ grid style = {dashed, gray!30},
+ xmin = 0,
+ xmax = 2,
+ ymin = 0,
+ ymax = 9,
+ xtick={0,0.5,...,2},
+ ytick={0,1,2,...,9},
+ xlabel = {User Utility Metric},
+ ylabel = {Service Utility Function},
+ legend columns = 2,
+ legend style = {%
+  %%  text width=2em,
+  text height=0.5ex,
+  %  text depth=.5ex,
+  %legend pos= outer north east,
+  at={(0.5,1.03)},
+  anchor=south,
+  font=\tiny,
+ },
+ ticklabel style = {font=\tiny},
+ label style = {font=\tiny},
+ ]
+
+ \definecolor{colorDATA1}{RGB}{0,0,0}
+ \definecolor{colorDATA2}{RGB}{0,0,255}
+ \definecolor{colorDATA3}{RGB}{0,255,0}
+ \definecolor{colorDATA4}{RGB}{0,0,255}
+ \definecolor{colorDATA5}{RGB}{0,0,0}
+
+ \tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}}
+ \tikzset{DATA1 style/.append style={plot common style,dotted, color=colorDATA1}}
+ \tikzset{DATA2 style/.append style={plot common style,dashdotted, color=colorDATA2}}
+ \tikzset{DATA3 style/.append style={plot common style,solid, color=colorDATA3}}
+ \tikzset{DATA4 style/.append style={plot common style,dashdotdotted, color=colorDATA4}}
+ \tikzset{DATA5 style/.append style={plot common style,dashed, color=colorDATA5}}
+
+ \def\tablename{PrimitiveService.dat}
+
+ %\def\xDomain{5:80}
+ %\def\xDomain{5:55}
+
+
+ \addplot[DATA1 style]
+ table[x=x,y=data1] {\tablename};
+ \addlegendentry{$\lambda = 0.1088$};
+
+ \addplot[DATA2 style]
+ table[x=x,y=data2] {\tablename};
+ \addlegendentry{$\lambda = 0.4683$};
+
+ \addplot[DATA3 style]
+ table[x=x,y=data3] {\tablename};
+ \addlegendentry{$\lambda = 5000$};
+
+ \addplot[DATA4 style]
+ table[x=x,y=data4] {\tablename};
+ \addlegendentry{$\lambda = -0.4683$};
+
+ \addplot[DATA5 style]
+ table[x=x,y=data5] {\tablename};
+ \addlegendentry{$\lambda = -0.1088$};
+
+ \end{axis}
+ \end{tikzpicture}

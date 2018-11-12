@@ -1,0 +1,63 @@
+ \begin{tikzpicture}
+ \begin{axis}[
+ enlargelimits=false,
+  width = 1.0\textwidth,
+  height = 0.6\textheight,
+  cycle list shift=0,
+  grid = major,
+  grid style = {dashed, gray!30},
+  xmin = 0.2,
+  xmax = 1.2,
+  ymin = 0,
+  ymax = 0.015,
+  xtick={0.2,0.4,...,1.2},
+  ytick={0,0.005,0.01,...,0.015},
+  xlabel = {Normalized user QoE metric},
+  ylabel = {Combined Weights},
+ legend style = {%
+  %%  text width=2em,
+  text height=2ex,
+  %  text depth=.5ex,
+  legend pos=north east,
+  font=\LARGE,
+ },
+ ticklabel style = {font=\LARGE},
+ label style = {font=\LARGE},
+ ]
+
+ \definecolor{colorQHMLWDF}{RGB}{255,0,0}
+ \definecolor{colorJSM}{RGB}{0,0,0}
+ \definecolor{colorEXPPF}{RGB}{0,255,0}
+ \definecolor{colorMDU}{RGB}{0,0,255}
+ \definecolor{colorLEI}{RGB}{153,63,0}
+
+ \tikzset{plot common style/.append style={line width=1pt, mark options={scale=1pt, solid}}}
+ \tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+ \tikzset{JSM style/.append style={plot common style,solid,mark=, color=colorJSM}}
+ \tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+ \tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+ \tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+
+
+ \def\tablename{DSMQoEWeights.dat}
+
+ \addplot[JSM style]
+ table[x=x1,y=y1] {\tablename};
+
+
+% \addplot[QHMLWDF style]
+% table[x=x,y=DSM] {\tablename};
+% \addlegendentry{ProportionalFair};
+% fairness
+
+
+ % \addplot[LEI style]
+ % table[x=x,y=UtilityLEI] {\tablename};
+ % \addlegendentry{Alg. LEI};
+
+ % \node[anchor=west] (source) at (axis cs:19, 0.9){};
+ % \node (destination) at (axis cs:51, 0.9){};
+ % \draw[dotted, black, line width=1pt](source)--(destination);
+
+ \end{axis}
+ \end{tikzpicture}

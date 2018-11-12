@@ -1,0 +1,828 @@
+\documentclass[conference,a4paper]{IEEEtran}
+\pagestyle{empty}
+
+%%%%
+
+%%%%
+\usepackage[usenames,dvipsnames]{xcolor}
+\newlength{\figWidth}
+\setlength{\figWidth}{\the\columnwidth}
+\newlength{\figHeight}
+\setlength{\figHeight}{\the\textheight}
+
+% Math
+\usepackage[cmex10]{mathtools}
+\interdisplaylinepenalty=2500
+
+\usepackage{siunitx}
+
+%%%%
+
+%%%%
+
+% Misc packages
+\usepackage{filecontents}
+\usepackage{silence}
+\usepackage{comment}
+\WarningFilter{latex}{Overwriting file}
+\WarningFilter{latex}{Tab has been converted to Blank Space}
+
+% Required packages
+\usepackage{tikz}
+\usepackage{pgfplots}
+\newlength{\plotWidth}
+\newlength{\plotHeight}
+\setlength{\plotWidth}{\figWidth}
+%\setlength{\plotHeight}{0.2\figHeight}
+\setlength{\plotHeight}{0.29\figHeight}
+\newcommand*\plotFontSizeA{\footnotesize}
+\newcommand*\plotFontSizeB{\scriptsize}
+
+% Set options/libraries for tikz
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{spy}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+
+
+
+\usetikzlibrary{chains}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.symbols}
+\usetikzlibrary{fit}
+\usetikzlibrary{calc,shapes.multipart,shapes.arrows}
+
+
+% Define xtick as:
+% mytick x interval=xmin:xstep:xmax, e.g., mytick x interval=80:10:120
+\pgfplotsset{mytick x interval/.style args={#1:#2:#3}{%
+    xmin=#1,xmax=#3,xincrement={#1}{#2},
+    xtick={#1,\xval,...,#3}
+  },
+  xincrement/.code 2 args={\pgfmathparse{#1+#2}\xdef\xval{\pgfmathresult}}
+}
+
+% Define ytick as:
+% mytick y interval=ymin:ystep:ymax, e.g., mytick y interval=0:0.1:1
+\pgfplotsset{mytick y interval/.style args={#1:#2:#3}{%
+    ymin=#1,ymax=#3,yincrement={#1}{#2},
+    ytick={#1,\yval,...,#3}
+  },
+  yincrement/.code 2 args={\pgfmathparse{#1+#2}\xdef\yval{\pgfmathresult}}
+}
+
+% New 'mark repeat*' to always add last mark with 'mark repeat'
+\pgfplotsset{mark repeat*/.style={%
+	scatter,
+	scatter src=x,
+	scatter/@pre marker code/.code={%
+		\pgfmathtruncatemacro\usemark{%
+			or(mod(\coordindex,#1)==0, (\coordindex==(\numcoords-1))
+		}
+		\ifnum\usemark=0
+			\pgfplotsset{mark=none}
+		\fi
+  },
+		scatter/@post marker code/.code={}
+	}
+}
+
+% Ticks black not gray
+%\pgfplotsset{every tick/.style={black,}}
+
+% Increase marker size
+%\tikzset{every mark/.append style={scale=1.5}}
+
+% Solid marks width dashed lines
+% http://tex.stackexchange.com/questions/185240/pgfplots-ugly-marks-when-using-dotted-or-dashed-line
+\tikzset{every mark/.append style={solid}} % solid marks width dashed lines
+
+% Default options for all plots
+\pgfplotsset{%
+	width=\plotWidth,
+	height=\plotHeight,
+  compat=1.9,
+  compat/show suggested version=false,
+  tick label style={font=\plotFontSizeA},
+  label style={font=\plotFontSizeA},
+  %label style={font=\plotFontSizeA,inner ysep=0pt},
+  %every axis/.append style={thick}, % all lines
+  %axis line style={thick}, % only the outside square
+	%every axis plot post/.append style={thick}, % only every plot line
+  every axis label={font=\plotFontSizeA},
+  grid=both,
+  %grid=none,
+	cycle list name=black white,
+  %x label style={at={(0.03,0.5)}},
+  %y label style={at={(0.03,0.5)}},
+  enlargelimits=true,
+  legend style={%
+    font=\plotFontSizeB, 
+    legend cell align=left,
+    %at={(.5,-.23)}, % same as above but with full control
+    %anchor=north,
+    %legend columns=2, % 1 means all vertical; -1 means all horizontal
+    %cells={anchor=west},
+    %rounded corners=1pt,
+    nodes={inner xsep=2pt,inner ysep=0.4pt,text depth=0.15em},
+  },
+}
+
+\begin{filecontents*}{satisfaction.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 10, 
+	xmax = 50, 
+	ymin = 0.4, 
+	ymax = 1.0,
+	xtick={10,20,30,40,50},
+	ytick={0.4,0.5,0.6,0.7,0.8,0.9,1.0} ),
+	xlabel = {Number of CBR users per cell},
+	ylabel = {Satisfaction Index},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\footnotesize,
+	},
+	ticklabel style = {font=\footnotesize},
+	label style = {font=\footnotesize},
+	]
+
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	
+	\def\tablename{satisfaction.dat}
+	
+	\addplot[JSM style] 
+	table[x=x,y=TSMQoE] {\tablename};
+	\addlegendentry{TSMQoE};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=ProportionalFair] {\tablename};
+	\addlegendentry{ProportionalFair};
+	
+	\addplot[EXPPF style] 
+	table[x=x,y=ProportionalFairQoE] {\tablename};
+	\addlegendentry{ProportionalFairQoE};
+	
+	\addplot[MDU style] 
+	table[x=x,y=TSMQoS] {\tablename};
+	\addlegendentry{TSMQoS};
+	
+	\addplot+[only marks,
+	color = blue,
+	mark = *,
+	mark options={fill=blue},
+	mark size = 7.5,
+	error bars/.cd,
+	error bar style={color=blue},
+	y  = both,
+	y explicit,
+	x  = none]
+	table[x index={0},y index={1}, y error plus index ={2}, y error minus index ={3}]plots/data/data.dat};	
+	
+%	\addplot[LEI style] 
+%	table[x=x,y=UtilityLEI] {\tablename};
+%	\addlegendentry{Alg. LEI};
+%	
+%	\node[anchor=west] (source) at (axis cs:19, 0.9){};
+%	\node (destination) at (axis cs:51, 0.9){};
+%	\draw[dotted, black, line width=1pt](source)--(destination); 
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+
+
+\begin{filecontents*}{fairness.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 10, 
+	xmax = 50, 
+	ymin = 0.4, 
+	ymax = 1.0,
+	xtick={10,20,30,40,50},
+	ytick={0.4,0.5,0.6,0.7,0.8,0.9,1.0},
+	xlabel = {Number of CBR users per cell},
+	ylabel = {Fairness Index},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\footnotesize,
+	},
+	ticklabel style = {font=\footnotesize},
+	label style = {font=\footnotesize},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{fairness.dat}
+	
+	\addplot[JSM style] 
+	table[x=x,y=TSMQoE] {\tablename};
+	\addlegendentry{TSMQoE};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=ProportionalFair] {\tablename};
+	\addlegendentry{ProportionalFair};
+	
+	\addplot[EXPPF style] 
+	table[x=x,y=ProportionalFairQoE] {\tablename};
+	\addlegendentry{ProportionalFairQoE};
+	
+	\addplot[MDU style] 
+	table[x=x,y=TSMQoS] {\tablename};
+	\addlegendentry{TSMQoS};	
+	
+	%	\addplot[LEI style] 
+	%	table[x=x,y=UtilityLEI] {\tablename};
+	%	\addlegendentry{Alg. LEI};	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+\begin{filecontents*}{capacity.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 10, 
+	xmax = 50, 
+	ymin = 0, 
+	ymax = 16.0,
+	xtick={10,20,30,40,50},
+	ytick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
+	xlabel = {Number of CBR users per cell},
+	ylabel = {Mean Troughput per cell},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\footnotesize,
+	},
+	ticklabel style = {font=\footnotesize},
+	label style = {font=\footnotesize},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{capacity.dat}
+	
+	\addplot[JSM style] 
+	table[x=x,y=TSMQoE] {\tablename};
+	\addlegendentry{TSMQoE};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=ProportionalFair] {\tablename};
+	\addlegendentry{ProportionalFair};
+	fairness
+	\addplot[EXPPF style] 
+	table[x=x,y=ProportionalFairQoE] {\tablename};
+	\addlegendentry{ProportionalFairQoE};
+	
+	\addplot[MDU style] 
+	table[x=x,y=TSMQoS] {\tablename};
+	\addlegendentry{TSMQoS};	
+	
+
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+
+\begin{filecontents*}{MOSxError.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 0, 
+	xmax = 700, 
+	ymin = 1, 
+	ymax = 4.5,
+	xtick={0,100,200,300,400,500,600,700},
+	ytick={1,1.5,2,2.5,3,3.5,4,4.5},
+	xlabel = {End-To-End delay(ms)},
+	ylabel = {Mean Opinion Score},
+	legend style = {%
+					text width=12em,
+			text height=5ex,
+	%				text depth=0ex,
+			legend pos=south west,
+			font=\Large,
+		},
+	ticklabel style = {font=\Large},
+	label style = {font=\Large},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{alou.dat}
+	
+	\addplot[JSM style] 
+	table[x=x,y=Error0] {\tablename};
+	\addlegendentry{Network Error 0\%};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=Error2] {\tablename};
+	\addlegendentry{Network Error 2\%};
+	
+	\addplot[EXPPF style] 
+	table[x=x,y=Error4] {\tablename};
+	\addlegendentry{Network Error 4\%};
+	\end{axis}
+	
+\end{tikzpicture}
+\end{filecontents*}
+
+\begin{filecontents*}{R.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 0, 
+	xmax = 700, 
+	ymin = 0, 
+	ymax = 100,
+	xtick={0,100,200,300,400,500,600,700},
+	ytick={0,10,20,30,40,50,60,70,80,90,100},
+	xlabel = {End-To-End delay(ms)},
+	ylabel = {R-factor},
+	legend style = {%
+				text width=12em,
+		text height=5ex,
+%				text depth=0ex,
+		legend pos=south west,
+		font=\Large,
+	},
+	ticklabel style = {font=\Large},
+	label style = {font=\Large},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.4pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{R.dat}
+	
+	\addplot[JSM style] 
+%\addplot [dashed, mark=o]
+	table[x=x,y=Error0] {\tablename};
+	\addlegendentry{Network Error 0\%};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=Error2] {\tablename};
+	\addlegendentry{Network Error 2\%};
+	
+	\addplot[EXPPF style] 
+	table[x=x,y=Error4] {\tablename};
+	\addlegendentry{Network Error 4\%};
+	\end{axis}
+	
+\end{tikzpicture}
+\end{filecontents*}
+
+
+\begin{filecontents*}{EndToEndDelay.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 0, 
+	xmax = 210, 
+	ymin = 0, 
+	ymax = 0.02,
+	xtick={0,50,100,150,210},
+	ytick={0,0.002,0.004,0.006,0.008,0.01,0.012,0.014,0.016,0.018,0.02},
+	xlabel = {End-To-End delay(ms)},
+%	ylabel = {naosei},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\footnotesize,
+	},
+	ticklabel style = {font=\Large},
+	label style = {font=\Large},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{CoreDelayPdf.dat}
+	
+	\addplot[JSM style] 
+	table[x=x1,y=y1] {\tablename};
+%	\addlegendentry{Error0};
+		\node[anchor=west] (source) at (axis cs:-0.07, 0.05){};
+		\node (destination) at (axis cs:1.03, 0.05){};
+		\draw[<->, black, line width=0.5pt](source)--(destination)node[above, pos=0.5, font=\tiny] {RT weight};
+%		
+%		\node[anchor=west] (source) at (axis cs:0.935, 0.05){};
+%		\node (destination) at (axis cs:5.03, 0.1){};
+%		\draw[<->, black, line width=0.5pt](source)--(destination)node[above, pos=0.5, font=\tiny] {NRT weight}; 
+\draw[thick,->] (1,0) -- (1,180) node[anchor=south west] {$3\sigma$};
+
+\draw[thick,->] (35,0) -- (35,150) node[anchor=south west] {$2\sigma$};
+
+\draw[thick,->] (70,0) -- (70,130) node[anchor=south west] {$1\sigma$};
+
+\draw[thick,->] (210,0) -- (210,180) node[anchor=south west] {$3\sigma$};
+
+\draw[thick,->] (170,0) -- (170,150) node[anchor=south west] {$2\sigma$};
+
+\draw[thick,->] (140,0) -- (140,130) node[anchor=south west] {$1\sigma$};
+
+\draw[thick,<->] (3,180) -- (208,180) node[above, pos = 0.4,  anchor=south west] {$99.7\%$ of probability};
+
+\draw[thick,<->] (37,150) -- (168,150) node[above, pos = 0.36,  anchor=south west] {$95\%$ of probability};
+
+\draw[thick,<->] (72,130) -- (138,130) node[above, pos = 0.2,  anchor=south west] {$68\%$ of probability};
+	\end{axis}
+
+	
+\end{tikzpicture}
+\end{filecontents*}
+
+
+
+\begin{filecontents*}{sigmoide.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 0, 
+	xmax = 10, 
+	ymin = 0, 
+	ymax = 16.0,
+	xtick={10,20,30,40,50},
+	ytick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16},
+	xlabel = {Number of CBR users per cell},
+	ylabel = {Mean Troughput per cell},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\LARGE,
+	},
+	ticklabel style = {font=\LARGE},
+	label style = {font=\LARGE},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=1pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=o, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{sigmoids.dat}
+	
+	\addplot[JSM style] 
+	table[x=x,y=TSM] {\tablename};
+	\addlegendentry{TSMQoE};
+	
+	\addplot[QHMLWDF style]
+	table[x=x,y=DSM] {\tablename};
+	\addlegendentry{ProportionalFair};
+	fairness
+
+	
+	%	\addplot[LEI style] 
+	%	table[x=x,y=UtilityLEI] {\tablename};
+	%	\addlegendentry{Alg. LEI};
+	
+	%	\node[anchor=west] (source) at (axis cs:19, 0.9){};
+	%	\node (destination) at (axis cs:51, 0.9){};
+	%	\draw[dotted, black, line width=1pt](source)--(destination); 
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+\begin{filecontents*}{TSMwj.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+	height = 0.6\textheight,
+	cycle list shift = 0,
+	grid = major,
+	grid style = {dashed, gray!30},
+	xmin = 0, 
+	xmax = 2, 
+	ymin = 0, 
+	ymax = 2.5,
+	xtick={0,0.2,0.4,...,2},
+	ytick={0,0.5,...,2},
+	xlabel = {Normalized QoS metric},
+	ylabel = {User Weight},
+	legend style = {%
+		%%		text width=2em,
+		text height=1ex,
+		%		text depth=.5ex,
+		legend pos=south west,
+		font=\LARGE,
+	},
+	ticklabel style = {font=\LARGE},
+	label style = {font=\LARGE},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=1pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{WeightWjNRT.dat}
+	
+	\addplot[JSM style] 
+	table[x=x1,y=y1] {\tablename};
+%	\addlegendentry{TSMQoE};
+%	
+%	\addplot[QHMLWDF style]
+%	table[x=x,y=DSM] {\tablename};
+%	\addlegendentry{ProportionalFair};
+%	fairness
+
+	
+	%	\addplot[LEI style] 
+	%	table[x=x,y=UtilityLEI] {\tablename};
+	%	\addlegendentry{Alg. LEI};
+	
+	%	\node[anchor=west] (source) at (axis cs:19, 0.9){};
+	%	\node (destination) at (axis cs:51, 0.9){};
+	%	\draw[dotted, black, line width=1pt](source)--(destination); 
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+
+\begin{filecontents*}{combinedWeiDSMQoE.tikz}
+	\begin{tikzpicture}
+	\begin{axis}[
+	enlargelimits=false,
+		width = 1.0\textwidth,
+		height = 0.6\textheight,
+		cycle list shift=0,
+		grid = major,
+		grid style = {dashed, gray!30},
+		xmin = 0.2, 
+		xmax = 1.2, 
+		ymin = 0, 
+		ymax = 0.015,
+		xtick={0.2,0.4,...,1.2},
+		ytick={0,0.005,0.01,...,0.015},
+		xlabel = {Normalized user QoE metric},
+		ylabel = {Combined Weights},
+	legend style = {%
+		%%		text width=2em,
+		text height=2ex,
+		%		text depth=.5ex,
+		legend pos=north east,
+		font=\LARGE,
+	},
+	ticklabel style = {font=\LARGE},
+	label style = {font=\LARGE},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{0,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=1pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{DSMQoEWeights.dat}
+	
+	\addplot[JSM style] 
+	table[x=x1,y=y1] {\tablename};
+
+	
+%	\addplot[QHMLWDF style]
+%	table[x=x,y=DSM] {\tablename};
+%	\addlegendentry{ProportionalFair};
+%	fairness
+
+	
+	%	\addplot[LEI style] 
+	%	table[x=x,y=UtilityLEI] {\tablename};
+	%	\addlegendentry{Alg. LEI};
+	
+	%	\node[anchor=west] (source) at (axis cs:19, 0.9){};
+	%	\node (destination) at (axis cs:51, 0.9){};
+	%	\draw[dotted, black, line width=1pt](source)--(destination); 
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+\begin{filecontents*}{combinedTSMQoE.tikz}
+	\begin{tikzpicture}
+%	[domain= 0:2000000, restrict y to domain= 0:0.009]
+	\begin{axis}[
+	enlargelimits=false,
+	width = 1.0\textwidth,
+		height = 0.6\textheight,
+		cycle list shift=0,
+		grid = major,
+		grid style = {dashed, gray!30},
+		xmin = 0.2, 
+		xmax = 1.4, 
+		ymin = 0, 
+		ymax = 0.006,
+		xtick={0.2,0.4,...,1.4},
+		ytick={0,0.001,0.002,0.003,0.004,0.005,0.006,0.007,0.008,0.009},
+		xlabel = {Normalized user QoE metric},
+		ylabel = {Combined Weights},
+	legend style = {%
+		%%		text width=2em,
+		text height=2ex,
+		%		text depth=.5ex,
+		legend pos=north east,
+		font=\LARGE,
+	},
+	ticklabel style = {font=\LARGE},
+	label style = {font=\LARGE},
+	]
+	
+	\definecolor{colorQHMLWDF}{RGB}{255,0,0} 
+	\definecolor{colorJSM}{RGB}{255,0,0}
+	\definecolor{colorEXPPF}{RGB}{0,255,0}
+	\definecolor{colorMDU}{RGB}{0,0,255}
+	\definecolor{colorLEI}{RGB}{153,63,0}
+	
+	\tikzset{plot common style/.append style={line width=0.8pt, mark options={scale=1pt, solid}}} 
+	\tikzset{QHMLWDF style/.append style={plot common style, solid, mark=square, color=colorQHMLWDF}}
+	\tikzset{JSM style/.append style={plot common style,solid,mark=, color=colorJSM}}
+	\tikzset{MDU style/.append style={plot common style,solid, mark=triangle, color=colorMDU}}
+	\tikzset{EXPPF style/.append style={plot common style,solid,mark=diamond, color=colorEXPPF}}
+	\tikzset{LEI style/.append style={plot common style,solid,mark=star, color=Turquoise}}
+	
+	
+	\def\tablename{combinatedWeightsTSMQoE.dat}
+	
+	\addplot[JSM style] 
+	table[x=x1,y=y1] {\tablename};
+
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{filecontents*}
+
+
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+
+%%%%
+
+%%%%
+
+\begin{document}
+
+%	\input{satisfaction.tikz}
+%	\input{fairness.tikz}
+%	\input{capacity.tikz}
+%\input{sigmoide.tikz}
+%\input{MOSxError.tikz}
+%\input{EndToEndDelay.tikz}
+%\input{R.tikz}
+\input{combinedWeiDSMQoE.tikz}
+\input{TSMwj.tikz}
+\input{combinedTSMQoE.tikz}
+\end{document}
