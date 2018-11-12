@@ -4,9 +4,29 @@
 \usepackage{graphicx,url}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
+%coisa feia
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[nolist]{acronym}
+\input{acronyms}
 
+\newcommand{\FigRef}[1]{Figure~\ref{#1}}
+\newcommand{\TabRef}[1]{Table~\ref{#1}}
+\newcommand{\SecRef}[1]{Section~\ref{#1}}
+\newcommand{\EqRef}[1]{Equation~\ref{#1}}
+\newcommand{\AppRef}[1]{Appendix~\ref{#1}}
 
-     
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[caption=false]{subfig}
+
+\usepackage[flushleft]{threeparttable}
+\usepackage{multirow}
+\usepackage{booktabs}
+%coisa feia     
 \sloppy
 
 \title{Utility-Based Resource Allocation Framework for QoE/QoS Maximization in OFDMA Networks}
@@ -47,18 +67,16 @@ F. Rodrigo P. Cavalcanti\inst{2} }
   página do artigo.
 \end{resumo}
 
+\section{Introduction}
+In recent years, it is noticeable the growing of users in cellular networks, which poses a challenge for the network operators to satisfy the \ac{QoS} requirements of all these users. \ac{RRA} techniques are used, for example, to provide an efficient distribution of network resources in order to improve overall system capacity. Another concept, that evaluates the users by your perception, is the \ac{QoE}, where a \ac{MOS} is given ranging between 1 to 5 \cite{ITU1996}. 
+Several algorithms based on \ac{QoE} scheduling can be found in literature. The work in \cite{cho2015qoe} proposed a \ac{PF} algorithm scheduler that consider the  users' \ac{QoE} maximization and users' fairness. In \cite{mushtaq2014qoe}, a downlink scheduling method is proposed, named QoE Scheme, for improving the \ac{QoE} for \ac{VoIP} traffic in \ac{LTE} networks, in order to achieve higher user satisfaction. In \cite{liu2012novel}, the authors proposed a \ac{QoE}-based carrier scheduling scheme for multiple services that aims at maximizing the users' \ac{QoE} and showed that their approach provided some improvements in terms of QoE and fairness. The work in \cite{toseef2011user} presented a \ac{QoE}-based \ac{RRA} framework to be applied in heterogeneous wireless networks with different classes of services, such as \ac{VoIP}, \ac{FTP} and video streaming. 
 
-\section{General Information}
+In this work, we are interested at studying the benefits of considering both the \ac{QoS} and \ac{QoE} of users in resource allocation process. We propose to extend the utility-based \ac{RRA} framework and algorithms (\ac{TSM} and \ac{DSM}) presented in \cite{Rodrigues2014_Wiley} in order to consider \ac{QoE} effects in system and to maximize the users' satisfaction based on their \ac{QoE} metrics.
 
-All full papers and posters (short papers) submitted to some SBC conference,
-including any supporting documents, should be written in English or in
-Portuguese. The format paper should be A4 with single column, 3.5 cm for upper
-margin, 2.5 cm for bottom margin and 3.0 cm for lateral margins, without
-headers or footers. The main font must be Times, 12 point nominal size, with 6
-points of space before each paragraph. Page numbers must be suppressed.
+%Based on the work presented in \cite{Rodrigues2014_Wiley}, we propose a utility-based \ac{RRA} framework and a change in two algorithms (\ac{TSM} and \ac{DSM}) in order to consider \ac{QoE} effects in system and to maximize the users' satisfaction based on their \ac{QoE} metrics.
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page texts.
+This work is organized as follows. Section \ref{Sec:SystemModeling} presents the system modeling considered in this work. In \SecRef{Sec:UtilFramework}, we describe the proposed utility-based \ac{RRA} framework suitable for both \ac{NRT} and \ac{RT} services. In \SecRef{sec:Performance} we show the algorithms simulated for comparison with our proposed one. Simulation assumptions are shown in \SecRef{Sec:SimulParams} and simulation results in \SecRef{Sec:Results}, while the conclusion is drawn in \SecRef{Sec:conclusion}.
+
 
 \section{First Page} \label{sec:firstpage}
 
@@ -154,7 +172,10 @@ The references must be listed using 12 point font size, with 6 points of space
 before each reference. The first line of each reference should not be
 indented, while the subsequent should be indented by 0.5 cm.
 
+%\bibliographystyle{sbc}
+%\bibliography{IEEEabrv,IEEEexample}
 \bibliographystyle{sbc}
-\bibliography{sbc-template}
-
+%\bibliography{ufc40}
+%\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,IEEEexample}
 \end{document}
